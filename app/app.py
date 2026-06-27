@@ -33,35 +33,36 @@ st.markdown('''
 st.header('1. Data Overview')
 st.write(f'Dataset contains **{df.shape[0]}** rows and **{df.shape[1]}** columns, yet no missing values, inconsistent values, wrong data types, etc were found in the dataset during the research.')
 
-st.markdown('''
-| Column | Description |
-|--------|-------------|
-| id | Unique listing identifier |
-| date_posted | Listing publication date |
-| district | Moscow district |
-| okrug | Administrative okrug (CAO, VAO, SAO, etc.) |
-| lat, lon | Apartment coordinates |
-| total_area | Total area, m² |
-| living_area | Living area, m² |
-| kitchen_area | Kitchen area, m² |
-| rooms | Number of rooms |
-| floor | Floor number |
-| total_floors | Total floors in the building |
-| building_year | Year of construction |
-| building_type | Building type (khrushchev, monolith, brick, etc.) |
-| ceiling_height | Ceiling height, m |
-| has_balcony | Balcony availability |
-| renovation | Renovation type (cosmetic, euro, designer, no_renovation) |
-| metro_station | Nearest metro station |
-| metro_line | Metro line name |
-| metro_distance_min | Distance to metro in minutes |
-| metro_distance_type | Distance type (walk / transport) |
-| to_center_km | Distance to Moscow center, km |
-| price_rub | Price in rubles |
-| price_per_sqm | Price per square meter |
-| mortgage_rate_at_listing | Mortgage rate at the time of listing |
-| seller_type | Seller type (agency / owner) |
-''')
+col_desc = pd.DataFrame([
+    ('id', 'Unique listing identifier'),
+    ('date_posted', 'Listing publication date'),
+    ('district', 'Moscow district'),
+    ('okrug', 'Administrative okrug (CAO, VAO, SAO, etc.)'),
+    ('lat, lon', 'Apartment coordinates'),
+    ('total_area', 'Total area, m²'),
+    ('living_area', 'Living area, m²'),
+    ('kitchen_area', 'Kitchen area, m²'),
+    ('rooms', 'Number of rooms'),
+    ('floor', 'Floor number'),
+    ('total_floors', 'Total floors in the building'),
+    ('building_year', 'Year of construction'),
+    ('building_type', 'Building type (khrushchev, monolith, brick, etc.)'),
+    ('ceiling_height', 'Ceiling height, m'),
+    ('has_balcony', 'Balcony availability'),
+    ('renovation', 'Renovation type (cosmetic, euro, designer, no_renovation)'),
+    ('metro_station', 'Nearest metro station'),
+    ('metro_line', 'Metro line name'),
+    ('metro_distance_min', 'Distance to metro in minutes'),
+    ('metro_distance_type', 'Distance type (walk / transport)'),
+    ('to_center_km', 'Distance to Moscow center, km'),
+    ('price_rub', 'Price in rubles'),
+    ('price_per_sqm', 'Price per square meter'),
+    ('mortgage_rate_at_listing', 'Mortgage rate at the time of listing'),
+    ('seller_type', 'Seller type (agency / owner)'),
+], columns=['Column', 'Description'])
+
+st.subheader('Data description')
+st.dataframe(col_desc)
 
 st.subheader('Data types')
 st.write(df.dtypes.astype(str))
