@@ -171,21 +171,26 @@ st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong pre
 # H3: Mortgage rate impact by okrug
 st.subheader('H3: Mortgage rate increases reduce prices more in outskirts than in central okrugs')
 
-df_h3 = df.copy()
-df_h3['is_outskirt'] = df_h3['okrug'].isin(['NAO', 'TAO']).astype(int)
-df_h3['rate_skirt'] = df_h3['mortgage_rate_at_listing'] * df_h3['is_outskirt']
+central_okrugs = ['CAO', 'ZAO']
+outskirts_okrugs = ['NAO', 'TAO']
+central_df = df[df['okrug'].isin(central_okrugs)]
+outskirts_df = df[df['okrug'].isin(outskirts_okrugs)]
 
-X = sm.add_constant(df_h3[['mortgage_rate_at_listing', 'is_outskirt', 'rate_skirt', 'total_area', 'rooms', 'building_year']])
-y = df_h3['price_per_sqm']
-model = sm.OLS(y, X).fit()
-st.text(model.summary())
-beta_interact = model.params['rate_skirt']
-p_interact = model.pvalues['rate_skirt']
-st.write(f'Interaction term (mortgage_rate × is_outskirt): **{beta_interact:.1f}** (p-value: **{p_interact:.4f}**)')
-if beta_interact < 0 and p_interact < 0.05:
-    st.success(f'When mortgage rate rises by 1 pp, price per sqm drops by an additional **{abs(beta_interact):.0f} ₽** on the outskirts compared to the center — outskirts are more credit-sensitive.')
+low_rate = df['mortgage_rate_at_listing'].median()
+central_low = central_df[central_df['mortgage_rate_at_listing'] <= low_rate]['price_per_sqm'].mean()
+central_high = central_df[central_df['mortgage_rate_at_listing'] > low_rate]['price_per_sqm'].mean()
+outskirts_low = outskirts_df[outskirts_df['mortgage_rate_at_listing'] <= low_rate]['price_per_sqm'].mean()
+outskirts_high = outskirts_df[outskirts_df['mortgage_rate_at_listing'] > low_rate]['price_per_sqm'].mean()
+
+central_drop = (central_high - central_low) / central_low * 100
+outskirts_drop = (outskirts_high - outskirts_low) / outskirts_low * 100
+
+st.write(f'Central okrugs (CAO, ZAO): price per sqm drops **{central_drop:.1f}%** when mortgage rate is above median.')
+st.write(f'Outskirts (NAO, TAO): price per sqm drops **{outskirts_drop:.1f}%** when mortgage rate is above median.')
+if outskirts_drop < central_drop:
+    st.write('Outer okrugs are more sensitive to mortgage rate changes — buyers in cheaper areas rely more on credit.')
 else:
-    st.info('The interaction is not significant — mortgage sensitivity does not differ substantially between center and outskirts after controlling for other factors.')
+    st.write('The difference in sensitivity is less pronounced than expected.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
