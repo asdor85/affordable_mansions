@@ -211,5 +211,6 @@ st.markdown('''
 - Dataset contains 50,000 Moscow secondary housing listings
 - No missing values or data quality issues
 - We have explored several hypotheses regarding the metro walk paradox, correlation between price and age etc and made a comparison between owner and agency prices.
+- Various data visualisations were provided via matplotlib.
 - New columns: `price_per_room`, `listing_year` and `building_age`
 ''')
