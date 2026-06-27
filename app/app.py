@@ -170,8 +170,12 @@ st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong pre
 
 # H3: Balcony price premium
 st.subheader('H3: Apartments with a balcony → higher price per sqm')
-corr3 = df['has_balcony'].astype(int).corr(df['price_per_sqm'])
-st.write(f'Correlation: **{corr3:.3f}**. Apartments with a balcony tend to have a higher price per sqm.')
+# H3: Balcony price premium
+st.subheader('H3: Apartments with a balcony → higher price per sqm')
+balcony_yes = df[df['has_balcony'] == True]['price_per_sqm'].mean()
+balcony_no = df[df['has_balcony'] == False]['price_per_sqm'].mean()
+premium = (balcony_yes - balcony_no) / balcony_no * 100
+st.write(f'With balcony: **{balcony_yes:,.0f} ₽/м²**, without: **{balcony_no:,.0f} ₽/м²** (+{premium:.1f}%). (Balconies add functional space)')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
