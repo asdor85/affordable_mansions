@@ -31,7 +31,7 @@ st.markdown('''
 
 # --- 1. Обзор данных ---
 st.header('1. Data Overview')
-st.write(f'Dataset contains **{df.shape[0]}** rows and **{df.shape[1]}** columns, yet no missing values were found in the dataset during the research.')
+st.write(f'Dataset contains **{df.shape[0]}** rows and **{df.shape[1]}** columns, yet no missing values, inconsistent values, wrong data types, etc were found in the dataset during the research.')
 
 st.markdown('''
 | Column | Description |
