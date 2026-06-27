@@ -168,10 +168,12 @@ st.subheader('H2: Newer buildings -> higher price per sqm')
 corr2 = df['building_year'].corr(df['price_per_sqm'])
 st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong predictor of price per sqm.')
 
-# H3: зависимость цены от расстояния до центра
-st.subheader('H3: Closer to center -> higher price')
-corr3 = df['to_center_km'].corr(df['price_rub'])
-st.write(f'Correlation: **{corr3:.3f}**. Apartments closer to the center tend to be more expensive.')
+# H3: Balcony price premium
+st.subheader('H3: Apartments with a balcony have a higher price per sqm')
+balcony_yes = df[df['has_balcony'] == True]['price_per_sqm'].mean()
+balcony_no = df[df['has_balcony'] == False]['price_per_sqm'].mean()
+premium = (balcony_yes - balcony_no) / balcony_no * 100
+st.write(f'With balcony: **{balcony_yes:,.0f} ₽/м²**, without: **{balcony_no:,.0f} ₽/м²** (+{premium:.1f}%). Balconies add functional space and are valued in the Moscow market.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
