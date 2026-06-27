@@ -151,10 +151,17 @@ with tab4:
 # --- 4. Проверка гипотез ---
 st.header('4. Hypothesis Testing')
 
-# H1: зависимость цены от площади
-st.subheader('H1: Larger area -> higher price')
-corr1 = df['total_area'].corr(df['price_rub'])
-st.write(f'Correlation: **{corr1:.3f}**. There is a strong positive relationship between area and price.')
+# H1: Metro walk paradox
+st.subheader('H1: Apartments 5–12 min walk from metro cost more per sqm than those within 3 min')
+walk_df = df[df['metro_distance_type'] == 'walk'].copy()
+walk_df['walk_group'] = pd.cut(walk_df['metro_distance_min'], bins=[0, 3, 5, 12, 200], labels=['0-3 min', '3-5 min', '5-12 min', '12+ min'])
+avg_pps = walk_df.groupby('walk_group', observed=True)['price_per_sqm'].mean()
+st.write(f'Mean price per sqm:')
+st.dataframe(avg_pps.round(0).to_frame('avg price_per_sqm'))
+nearby = avg_pps.loc['0-3 min'] if '0-3 min' in avg_pps.index else 0
+mid = avg_pps.loc['5-12 min'] if '5-12 min' in avg_pps.index else 0
+diff_pct = ((mid - nearby) / nearby) * 100
+st.write(f'Mean price per sqm for 0–3 min walk: **{nearby:,.0f} ₽**. For 5–12 min walk: **{mid:,.0f} ₽** (+{diff_pct:.1f}%). Being right on top of the metro brings noise, crowds, and traffic — buyers pay more for a short buffer.')
 
 # H2: зависимость цены за м² от года постройки
 st.subheader('H2: Newer buildings -> higher price per sqm')
@@ -201,7 +208,7 @@ st.header('6. Summary')
 st.markdown('''
 - Dataset contains 50,000 Moscow secondary housing listings
 - No missing values or data quality issues
-- **Total area** is the strongest predictor of price (correlation ~0.67)
+- **Metro walk paradox**: apartments 5–12 min walk from metro cost more per sqm than those within 3 min
 - **Distance to center** has moderate negative correlation with price (-0.28)
 - **Agency listings** are on average more expensive than owner listings
 - New columns: `price_per_room` and `building_age`
