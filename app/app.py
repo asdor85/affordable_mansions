@@ -168,29 +168,10 @@ st.subheader('H2: Newer buildings -> higher price per sqm')
 corr2 = df['building_year'].corr(df['price_per_sqm'])
 st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong predictor of price per sqm.')
 
-# H3: Mortgage rate impact by okrug
-st.subheader('H3: Mortgage rate increases reduce prices more in outskirts than in central okrugs')
-
-central_okrugs = ['CAO', 'ZAO']
-outskirts_okrugs = ['NAO', 'TAO']
-central_df = df[df['okrug'].isin(central_okrugs)]
-outskirts_df = df[df['okrug'].isin(outskirts_okrugs)]
-
-low_rate = df['mortgage_rate_at_listing'].median()
-central_low = central_df[central_df['mortgage_rate_at_listing'] <= low_rate]['price_per_sqm'].mean()
-central_high = central_df[central_df['mortgage_rate_at_listing'] > low_rate]['price_per_sqm'].mean()
-outskirts_low = outskirts_df[outskirts_df['mortgage_rate_at_listing'] <= low_rate]['price_per_sqm'].mean()
-outskirts_high = outskirts_df[outskirts_df['mortgage_rate_at_listing'] > low_rate]['price_per_sqm'].mean()
-
-central_drop = (central_high - central_low) / central_low * 100
-outskirts_drop = (outskirts_high - outskirts_low) / outskirts_low * 100
-
-st.write(f'Central okrugs (CAO, ZAO): price per sqm drops **{central_drop:.1f}%** when mortgage rate is above median.')
-st.write(f'Outskirts (NAO, TAO): price per sqm drops **{outskirts_drop:.1f}%** when mortgage rate is above median.')
-if outskirts_drop < central_drop:
-    st.write('Outer okrugs are more sensitive to mortgage rate changes — buyers in cheaper areas rely more on credit.')
-else:
-    st.write('The difference in sensitivity is less pronounced than expected.')
+# H3: зависимость цены от расстояния до центра
+st.subheader('H3: Closer to center -> higher price')
+corr3 = df['to_center_km'].corr(df['price_rub'])
+st.write(f'Correlation: **{corr3:.3f}**. Apartments closer to the center tend to be more expensive.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
