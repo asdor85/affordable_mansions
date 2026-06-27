@@ -168,20 +168,15 @@ st.subheader('H2: Newer buildings -> higher price per sqm')
 corr2 = df['building_year'].corr(df['price_per_sqm'])
 st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong predictor of price per sqm.')
 
-# H3: Khrushchev discount shrinks with renovation
-st.subheader('H3: Renovation reduces the khrushchev price discount more than for other building types')
+# H3: Old but gold — Stalin buildings in central okrugs
+st.subheader('H3: Stalin-era apartments in central okrugs cost more per sqm than modern monolith buildings in the same area')
 
-def renovation_uplift(bt):
-    no = df[(df['building_type'] == bt) & (df['renovation'] == 'no_renovation')]['price_per_sqm'].mean()
-    ren = df[(df['building_type'] == bt) & (df['renovation'] != 'no_renovation')]['price_per_sqm'].mean()
-    return (ren - no) / no * 100
+central = df[df['okrug'].isin(['CAO', 'ZAO'])]
+stalin = central[central['building_type'] == 'stalin']['price_per_sqm'].mean()
+monolith = central[central['building_type'] == 'monolith']['price_per_sqm'].mean()
+premium = (stalin - monolith) / monolith * 100
 
-khrushchev_uplift = renovation_uplift('khrushchev')
-panel_uplift = renovation_uplift('panel')
-monolith_uplift = renovation_uplift('monolith')
-
-st.write(f'Renovation price uplift — Khrushchev: **{khrushchev_uplift:.1f}%**, Panel: **{panel_uplift:.1f}%**, Monolith: **{monolith_uplift:.1f}%**')
-st.write(f'So for khrushchevs this gap is {khrushchev_uplift:.1f}% yet for panels and monoliths this gap is {panel_uplift:.1f}% and {monolith_uplift:.1f}% respectively. Renovation transforms the perception of these budget buildings more than for panels or monoliths.')
+st.write(f'In CAO/ZAO, Stalin buildings average **{stalin:,.0f} ₽/м²** vs monolith **{monolith:,.0f} ₽/м²** (+{premium:.1f}%). Historical charm, thick walls, high ceilings outweigh modern construction in premium locations.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
