@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 from _utils import load_data, add_transformed_columns
 
 # Настройки страницы и стиля графиков
@@ -151,10 +152,32 @@ with tab4:
 # --- 4. Проверка гипотез ---
 st.header('4. Hypothesis Testing')
 
-# H1: зависимость цены от площади
-st.subheader('H1: Larger area -> higher price')
-corr1 = df['total_area'].corr(df['price_rub'])
-st.write(f'Correlation: **{corr1:.3f}**. There is a strong positive relationship between area and price.')
+# H1: "Signal of a Downturn" — Mortgage Rate Shock
+st.subheader('H1: Mortgage Rate Shock — Owner vs Agency Price Response')
+st.markdown('''
+**Hypothesis:** A 1 percentage point increase in the mortgage rate leads to a larger price reduction for owner-listed properties than for agency-listed properties.
+
+**Model:** `Price_per_sqm = α + β₁·mortgage_rate + β₂·owner + β₃·(mortgage_rate × owner) + ε`
+''')
+
+df_h1 = df.copy()
+df_h1['is_owner'] = (df_h1['seller_type'] == 'owner').astype(int)
+df_h1['rate_owner'] = df_h1['mortgage_rate_at_listing'] * df_h1['is_owner']
+
+X = df_h1[['mortgage_rate_at_listing', 'is_owner', 'rate_owner']]
+X = sm.add_constant(X)
+y = df_h1['price_per_sqm']
+
+model = sm.OLS(y, X).fit()
+st.text(model.summary())
+
+beta_3 = model.params['rate_owner']
+p_value = model.pvalues['rate_owner']
+st.write(f'Interaction term (β₃): **{beta_3:.2f}** (p-value: **{p_value:.4f}**)')
+if beta_3 < 0 and p_value < 0.05:
+    st.success('✅ β₃ < 0 and significant — Owners cut prices more than agencies when mortgage rates rise.')
+else:
+    st.info('The interaction term is not significantly negative — the hypothesis is not supported.')
 
 # H2: зависимость цены за м² от года постройки
 st.subheader('H2: Newer buildings -> higher price per sqm')
