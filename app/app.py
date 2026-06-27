@@ -63,13 +63,8 @@ st.markdown('''
 | seller_type | Seller type (agency / owner) |
 ''')
 
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader('First rows')
-    st.dataframe(df.head())
-with col2:
-    st.subheader('Data types')
-    st.write(df.dtypes.astype(str))
+st.subheader('Data types')
+st.write(df.dtypes.astype(str))
 
 st.subheader('Descriptive Statistics')
 st.dataframe(df.describe())
