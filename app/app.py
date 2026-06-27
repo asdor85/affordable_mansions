@@ -20,6 +20,14 @@ df_t = add_transformed_columns(df)
 
 st.title('Moscow Secondary Housing Market Analysis')
 
+# Введение о проекте
+st.markdown('''
+> This project aims to provide a clear perspective on the Moscow secondary market nowadays
+> through comprehensive research based on the latest statistics (from 2020-2026) for both
+> potential personal and commercial use. It was fully done by HSE 1st year undergraduate
+> student Filippovskiy Denis.
+''')
+
 # --- 1. Обзор данных ---
 st.header('1. Data Overview')
 st.write(f'Dataset contains **{df.shape[0]}** rows and **{df.shape[1]}** columns.')
