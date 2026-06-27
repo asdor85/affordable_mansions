@@ -171,23 +171,17 @@ st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong pre
 # H3: Khrushchev discount shrinks with renovation
 st.subheader('H3: Renovation reduces the khrushchev price discount more than for other building types')
 
-def calc_discount(building_type):
-    group = df[df['building_type'] == building_type]
-    panel = df[df['building_type'] == 'panel']
-    group_no = group[group['renovation'] == 'no_renovation']['price_per_sqm'].mean()
-    group_ren = group[group['renovation'] != 'no_renovation']['price_per_sqm'].mean()
-    panel_no = panel[panel['renovation'] == 'no_renovation']['price_per_sqm'].mean()
-    panel_ren = panel[panel['renovation'] != 'no_renovation']['price_per_sqm'].mean()
-    no_disc = (group_no - panel_no) / panel_no * 100
-    ren_disc = (group_ren - panel_ren) / panel_ren * 100
-    return no_disc, ren_disc
+def renovation_uplift(bt):
+    no = df[(df['building_type'] == bt) & (df['renovation'] == 'no_renovation')]['price_per_sqm'].mean()
+    ren = df[(df['building_type'] == bt) & (df['renovation'] != 'no_renovation')]['price_per_sqm'].mean()
+    return (ren - no) / no * 100
 
-khrus_no_d, khrus_ren_d = calc_discount('khrushchev')
-monolith_no_d, monolith_ren_d = calc_discount('monolith')
+khrushchev_uplift = renovation_uplift('khrushchev')
+panel_uplift = renovation_uplift('panel')
+monolith_uplift = renovation_uplift('monolith')
 
-st.write(f'**Khrushchev vs panel:** Unrenovated discount **{khrus_no_d:.1f}%**, renovated discount **{khrus_ren_d:.1f}%**')
-st.write(f'**Monolith vs panel:** Unrenovated discount **{monolith_no_d:.1f}%**, renovated discount **{monolith_ren_d:.1f}%**')
-st.write('Renovation narrows the khrushchev discount substantially more than for monoliths, transforming the perception of these budget buildings.')
+st.write(f'Renovation price uplift — Khrushchev: **{khrushchev_uplift:.1f}%**, Panel: **{panel_uplift:.1f}%**, Monolith: **{monolith_uplift:.1f}%**')
+st.write(f'So for khrushchevs this gap is {khrushchev_uplift:.1f}% yet for panels and monoliths this gap is {panel_uplift:.1f}% and {monolith_uplift:.1f}% respectively. Renovation transforms the perception of these budget buildings more than for panels or monoliths.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
