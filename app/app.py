@@ -169,6 +169,7 @@ corr2 = df['building_year'].corr(df['price_per_sqm'])
 st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong predictor of price per sqm.')
 
 # H3: Balcony price premium
+st.subheader('H3: Apartments with a balcony → higher price per sqm')
 balcony_yes = df[df['has_balcony'] == True]['price_per_sqm'].mean()
 balcony_no = df[df['has_balcony'] == False]['price_per_sqm'].mean()
 premium = (balcony_yes - balcony_no) / balcony_no * 100
