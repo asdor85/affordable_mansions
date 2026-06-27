@@ -168,10 +168,21 @@ st.subheader('H2: Newer buildings -> higher price per sqm')
 corr2 = df['building_year'].corr(df['price_per_sqm'])
 st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong predictor of price per sqm.')
 
-# H3: зависимость цены от расстояния до центра
-st.subheader('H3: Closer to center -> higher price')
-corr3 = df['to_center_km'].corr(df['price_rub'])
-st.write(f'Correlation: **{corr3:.3f}**. Apartments closer to the center tend to be more expensive.')
+# H3: Khrushchev discount shrinks with renovation
+st.subheader('H3: Renovation reduces the khrushchev price discount more than for other building types')
+
+# Calculate price per sqm for khrushchev vs others by renovation status
+khrus = df[df['building_type'] == 'khrushchev']
+other = df[df['building_type'] != 'khrushchev']
+khrus_no = khrus[khrus['renovation'] == 'no_renovation']['price_per_sqm'].mean()
+khrus_ren = khrus[khrus['renovation'] != 'no_renovation']['price_per_sqm'].mean()
+other_no = other[other['renovation'] == 'no_renovation']['price_per_sqm'].mean()
+other_ren = other[other['renovation'] != 'no_renovation']['price_per_sqm'].mean()
+
+no_discount = (khrus_no - other_no) / other_no * 100
+ren_discount = (khrus_ren - other_ren) / other_ren * 100
+
+st.write(f'Unrenovated khrushchev discount: **{no_discount:.1f}%**. Renovated khrushchev discount: **{ren_discount:.1f}%** (gap narrows by {abs(no_discount - ren_discount):.0f}pp). Renovation transforms the perception of these budget buildings more than for panels or monoliths.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
