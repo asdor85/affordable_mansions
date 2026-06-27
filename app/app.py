@@ -171,18 +171,23 @@ st.write(f'Correlation: **{corr2:.3f}**. Building year alone is not a strong pre
 # H3: Khrushchev discount shrinks with renovation
 st.subheader('H3: Renovation reduces the khrushchev price discount more than for other building types')
 
-# Calculate price per sqm for khrushchev vs others by renovation status
-khrus = df[df['building_type'] == 'khrushchev']
-other = df[df['building_type'] != 'khrushchev']
-khrus_no = khrus[khrus['renovation'] == 'no_renovation']['price_per_sqm'].mean()
-khrus_ren = khrus[khrus['renovation'] != 'no_renovation']['price_per_sqm'].mean()
-other_no = other[other['renovation'] == 'no_renovation']['price_per_sqm'].mean()
-other_ren = other[other['renovation'] != 'no_renovation']['price_per_sqm'].mean()
+def calc_discount(building_type):
+    group = df[df['building_type'] == building_type]
+    panel = df[df['building_type'] == 'panel']
+    group_no = group[group['renovation'] == 'no_renovation']['price_per_sqm'].mean()
+    group_ren = group[group['renovation'] != 'no_renovation']['price_per_sqm'].mean()
+    panel_no = panel[panel['renovation'] == 'no_renovation']['price_per_sqm'].mean()
+    panel_ren = panel[panel['renovation'] != 'no_renovation']['price_per_sqm'].mean()
+    no_disc = (group_no - panel_no) / panel_no * 100
+    ren_disc = (group_ren - panel_ren) / panel_ren * 100
+    return no_disc, ren_disc
 
-no_discount = (khrus_no - other_no) / other_no * 100
-ren_discount = (khrus_ren - other_ren) / other_ren * 100
+khrus_no_d, khrus_ren_d = calc_discount('khrushchev')
+monolith_no_d, monolith_ren_d = calc_discount('monolith')
 
-st.write(f'Unrenovated khrushchev discount: **{no_discount:.1f}%**. Renovated khrushchev discount: **{ren_discount:.1f}%** (gap narrows by {abs(no_discount - ren_discount):.0f}pp). Renovation transforms the perception of these budget buildings more than for panels or monoliths.')
+st.write(f'**Khrushchev vs panel:** Unrenovated discount **{khrus_no_d:.1f}%**, renovated discount **{khrus_ren_d:.1f}%**')
+st.write(f'**Monolith vs panel:** Unrenovated discount **{monolith_no_d:.1f}%**, renovated discount **{monolith_ren_d:.1f}%**')
+st.write('Renovation narrows the khrushchev discount substantially more than for monoliths, transforming the perception of these budget buildings.')
 
 # H4: сравнение цен агентств и собственников
 st.subheader('H4: Agency vs Owner prices')
