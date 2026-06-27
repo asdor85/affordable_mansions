@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import statsmodels.api as sm
 from _utils import load_data, add_transformed_columns
 
 # Настройки страницы и стиля графиков
@@ -152,31 +151,10 @@ with tab4:
 # --- 4. Проверка гипотез ---
 st.header('4. Hypothesis Testing')
 
-# H1: Owner vs Agency price after controlling for characteristics
-st.subheader('H1: Owner listings have lower price per sqm than agency listings')
-st.markdown('''
-**Hypothesis:** Apartments listed by owners (one-time sellers) will have a statistically significant lower price per square meter than comparable apartments listed by agencies, after controlling for all observable characteristics.
-
-**Model:** `Price_per_sqm = α + β₁·is_owner + β₂·total_area + β₃·rooms + β₄·building_year + β₅·to_center_km + ε`
-''')
-
-df_h1 = df.copy()
-df_h1['is_owner'] = (df_h1['seller_type'] == 'owner').astype(int)
-
-X = df_h1[['is_owner', 'total_area', 'rooms', 'building_year', 'to_center_km']]
-X = sm.add_constant(X)
-y = df_h1['price_per_sqm']
-
-model = sm.OLS(y, X).fit()
-st.text(model.summary())
-
-beta_owner = model.params['is_owner']
-p_owner = model.pvalues['is_owner']
-st.write(f'Coefficient for owner listings (β₁): **{beta_owner:.2f}** (p-value: **{p_owner:.4f}**)')
-if beta_owner < 0 and p_owner < 0.05:
-    st.success('✅ β₁ < 0 and significant — Owner-listed apartments have lower price per sqm than agency-listed ones, controlling for other factors.')
-else:
-    st.info('The hypothesis is not supported by the data.')
+# H1: зависимость цены от площади
+st.subheader('H1: Larger area -> higher price')
+corr1 = df['total_area'].corr(df['price_rub'])
+st.write(f'Correlation: **{corr1:.3f}**. There is a strong positive relationship between area and price.')
 
 # H2: зависимость цены за м² от года постройки
 st.subheader('H2: Newer buildings -> higher price per sqm')
@@ -223,7 +201,7 @@ st.header('6. Summary')
 st.markdown('''
 - Dataset contains 50,000 Moscow secondary housing listings
 - No missing values or data quality issues
-- **Owner listings** have lower price per sqm than agency listings after controlling for observable characteristics
+- **Total area** is the strongest predictor of price (correlation ~0.67)
 - **Distance to center** has moderate negative correlation with price (-0.28)
 - **Agency listings** are on average more expensive than owner listings
 - New columns: `price_per_room` and `building_age`
