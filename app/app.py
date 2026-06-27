@@ -68,13 +68,7 @@ st.subheader('Data types')
 st.write(df.dtypes.astype(str))
 
 st.subheader('Descriptive Statistics')
-num_cols = ['price_rub', 'total_area', 'living_area', 'kitchen_area', 'rooms', 'floor', 'total_floors', 'building_year', 'ceiling_height', 'metro_distance_min', 'to_center_km', 'price_per_sqm']
-stats_df = pd.DataFrame({
-    'mean': df[num_cols].mean().round(1),
-    'median': df[num_cols].median().round(1),
-    'std': df[num_cols].std().round(1)
-})
-st.dataframe(stats_df)
+st.dataframe(df.describe())
 
 # --- 2. Очистка данных ---
 st.header('2. Data Cleanup')
