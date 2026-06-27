@@ -210,8 +210,6 @@ st.header('6. Summary')
 st.markdown('''
 - Dataset contains 50,000 Moscow secondary housing listings
 - No missing values or data quality issues
-- **Metro walk paradox**: apartments 5–12 min walk from metro cost more per sqm than those within 3 min
-- **Distance to center** has moderate negative correlation with price (-0.28)
-- **Agency listings** are on average more expensive than owner listings
+- We have explored several hypotheses regarding the metro walk paradox, correlation between price and age etc and made a comparison between owner and agency prices.
 - New columns: `price_per_room` and `building_age`
 ''')
