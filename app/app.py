@@ -36,31 +36,31 @@ st.write(f'Dataset contains **{df.shape[0]}** rows and **{df.shape[1]}** columns
 st.markdown('''
 | Column | Description |
 |--------|-------------|
-| id | Уникальный идентификатор объявления |
-| date_posted | Дата публикации объявления |
-| district | Район Москвы |
-| okrug | Административный округ (CAO, VAO, SAO и т.д.) |
-| lat, lon | Координаты квартиры |
-| total_area | Общая площадь, м² |
-| living_area | Жилая площадь, м² |
-| kitchen_area | Площадь кухни, м² |
-| rooms | Количество комнат |
-| floor | Этаж |
-| total_floors | Всего этажей в доме |
-| building_year | Год постройки дома |
-| building_type | Тип здания (khrushchev, monolith, brick и т.д.) |
-| ceiling_height | Высота потолков, м |
-| has_balcony | Наличие балкона |
-| renovation | Тип ремонта (cosmetic, euro, designer, no_renovation) |
-| metro_station | Станция метро |
-| metro_line | Линия метро |
-| metro_distance_min | Расстояние до метро в минутах |
-| metro_distance_type | Тип расстояния (walk / transport) |
-| to_center_km | Расстояние до центра Москвы, км |
-| price_rub | Цена в рублях |
-| price_per_sqm | Цена за квадратный метр |
-| mortgage_rate_at_listing | Ставка по ипотеке на момент публикации |
-| seller_type | Тип продавца (agency / owner) |
+| id | Unique listing identifier |
+| date_posted | Listing publication date |
+| district | Moscow district |
+| okrug | Administrative okrug (CAO, VAO, SAO, etc.) |
+| lat, lon | Apartment coordinates |
+| total_area | Total area, m² |
+| living_area | Living area, m² |
+| kitchen_area | Kitchen area, m² |
+| rooms | Number of rooms |
+| floor | Floor number |
+| total_floors | Total floors in the building |
+| building_year | Year of construction |
+| building_type | Building type (khrushchev, monolith, brick, etc.) |
+| ceiling_height | Ceiling height, m |
+| has_balcony | Balcony availability |
+| renovation | Renovation type (cosmetic, euro, designer, no_renovation) |
+| metro_station | Nearest metro station |
+| metro_line | Metro line name |
+| metro_distance_min | Distance to metro in minutes |
+| metro_distance_type | Distance type (walk / transport) |
+| to_center_km | Distance to Moscow center, km |
+| price_rub | Price in rubles |
+| price_per_sqm | Price per square meter |
+| mortgage_rate_at_listing | Mortgage rate at the time of listing |
+| seller_type | Seller type (agency / owner) |
 ''')
 
 col1, col2 = st.columns(2)
