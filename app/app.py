@@ -161,7 +161,7 @@ st.dataframe(avg_pps.round(0).to_frame('avg price_per_sqm'))
 nearby = avg_pps.loc['0-3 min'] if '0-3 min' in avg_pps.index else 0
 mid = avg_pps.loc['5-12 min'] if '5-12 min' in avg_pps.index else 0
 diff_pct = ((mid - nearby) / nearby) * 100
-st.write(f'Mean price per sqm for 0–3 min walk: **{nearby:,.0f} ₽**. For 5–12 min walk: **{mid:,.0f} ₽** (+{diff_pct:.1f}%). Being right on top of the metro brings noise, crowds, and traffic — buyers pay more for a short buffer.')
+st.write(f'Mean price per sqm for 0–3 min walk: **{nearby:,.0f} ₽**. For 5–12 min walk: **{mid:,.0f} ₽** (+{diff_pct:.1f}%). Because being right on top of the metro results in constant noise, crowds and traffic around your apartment.')
 
 # H2: зависимость цены за м² от года постройки
 st.subheader('H2: Newer buildings -> higher price per sqm')
